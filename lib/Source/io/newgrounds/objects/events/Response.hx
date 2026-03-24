@@ -30,15 +30,27 @@ abstract Response<T:BaseData>(RawResponse<T>) {
 	
 	public function new (core:NGLite, reply:String) {
 		
-		try { this = Json.parse(reply); }
-		catch (e:Dynamic) {
-			
-			this = Json.parse('{"success":false,"error":{"message":"Error parsing reply:\'$reply\' error:\'$e\'","code":0}}');
+		try 
+		{ 
+			this = Json.parse(reply); 
+		}
+		catch (e:Dynamic) 
+		{
+			this = {
+				success: false,
+				error: {
+					message: 'Error parsing reply: \'$reply\' error: \'$e\'',
+					code: 0
+				},
+				debug: null,
+				result: null,
+				app_id: null
+			}
 		}
 		
 		if (!success)
 			core.logError('Call unseccessful: $error');
-		else if(!result.success)
+		else if (!result.success)
 			core.logError('${result.component} fail: ${result.error}');
 	}
 	
